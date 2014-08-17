@@ -15,7 +15,7 @@ This is the R markdown file for my peer assessment assignment 1 for Reproducible
 2. Filter out the NA values by using complete.cases
 3. Change the format of "date" variable into data by using as.Date
 
-```{r}
+```{r Read_Data}
 data <- read.csv("activity.csv", header=T)
 tidy_data <- data[complete.cases(data),]
 tidy_data$date <- as.Date(tidy_data$date)
@@ -24,27 +24,27 @@ tidy_data$date <- as.Date(tidy_data$date)
 ## Step 2. What is mean total number of steps taken per day?
 * Make a histogram of the total number of steps taken each day by using aggregate and barplot function
 
-```{r}
+```{r Total_Steps_By_Day}
 Tot_Steps_by_Day <- aggregate(tidy_data$steps, list(tidy_data$date),sum)
 barplot(Tot_Steps_by_Day$x, names.arg=Tot_Steps_by_Day$Group.1)
 ```
 
 * Calculate and report the mean total number of steps taken per day
 
-```{r}
+```{r Mean_Steps_By_Day}
 mean(Tot_Steps_by_Day$x) 
 ```
 
 * Calculate and report the median total number of steps taken per day
 
-```{r}
+```{r Median_Steps_By_Day}
 median(Tot_Steps_by_Day$x) 
 ```
 
 ## Step 3. What is the average daily activity pattern?
 * Make a time series plot of the 5-minute interval  and the average number of steps by using aggregate and plot function
 
-```{r}
+```{r Mean_Steps_By_Interval}
 Mean_steps_by_interval <- aggregate(tidy_data$steps, list(tidy_data$interval),mean)
 with(Mean_steps_by_interval, plot(Group.1, x, type="l",xlab="5-min Interval", ylab="Avg # of steps"))
 
@@ -52,7 +52,7 @@ with(Mean_steps_by_interval, plot(Group.1, x, type="l",xlab="5-min Interval", yl
 
 * Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
 
-```{r}
+```{r Mean_Steps_By_Interval_Avg}
 Mean_steps_by_interval[which(Mean_steps_by_interval$x == max(Mean_steps_by_interval$x)),1]
 ```
 
@@ -60,7 +60,7 @@ Mean_steps_by_interval[which(Mean_steps_by_interval$x == max(Mean_steps_by_inter
 
 * Calculate and report the total number of missing values in the dataset by using complete.cases function and summing the output vector
 
-```{r}
+```{r Total_Missing_Values}
 sum(!complete.cases(data))
 ```
 
@@ -68,7 +68,7 @@ sum(!complete.cases(data))
 
 * Create a new dataset that is equal to the original dataset but with the missing data filled in by using for-loop
 
-```{r}
+```{r Filling_NA}
 data_fillingNA <- data
 data_fillingNA$date <- as.Date(data_fillingNA$date)
 for (i in 1:length(data$steps)) {
@@ -81,7 +81,7 @@ head(data_fillingNA)
 
 * Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. 
 
-```{r}
+```{r Total_Steps_By_Day_fillingNA}
 Tot_Steps_by_Day_fillingNA <- aggregate(data_fillingNA$steps, list(data_fillingNA$date),sum)
 barplot(Tot_Steps_by_Day_fillingNA$x, names.arg=Tot_Steps_by_Day_fillingNA$Group.1)
 
@@ -98,7 +98,7 @@ median(Tot_Steps_by_Day_fillingNA$x)
 
 * Create a new factor variable in the dataset with two levels - "weekday" and "weekend".
 
-```{r}
+```{r Weekday_of_Date}
 Weekday_of_date <- weekdays(data_fillingNA$date, abbreviate = FALSE)
 data_fillingNA$Weekend_or_not <- vector(length=length(data_fillingNA$steps))
 
@@ -111,7 +111,7 @@ data_fillingNA$Weekend_or_not <- as.factor(data_fillingNA$Weekend_or_not)
 
 * Make a panel plot containing a time series plot  of the 5-minute interval and the average number of steps taken by splitting into weekend factor and using base plotting system
 
-```{r}
+```{r Mean_steps_by_interval_fillingNA}
 Mean_steps_by_interval_fillingNA <- aggregate(data_fillingNA$steps, list(data_fillingNA$interval,data_fillingNA$Weekend_or_not),mean)
 
 par(mfrow = c(2,1))
